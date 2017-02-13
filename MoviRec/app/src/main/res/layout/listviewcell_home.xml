@@ -2,29 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@color/colorPrimary"
     android:weightSum="1">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="82dp"
-        android:layout_weight="0.15">
+        android:layout_height="75dp">
 
         <TextView
             android:text="Watched"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:id="@+id/listviewhomecell_listtitle"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:paddingLeft="10dp"
+            android:textAlignment="viewStart"
+            android:gravity="center_vertical"
+            android:hapticFeedbackEnabled="true" />
 
         <TextView
             android:text="2 Items"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/listviewhomecell_itemcount"
-            android:textColor="?android:attr/textColorSecondaryInverse" />
+            android:textColor="?android:attr/textColorSecondaryInverse"
+            android:paddingLeft="10dp"
+            android:textAlignment="viewStart"
+            android:gravity="center_vertical"
+            android:layout_height="20dp" />
     </LinearLayout>
 </LinearLayout>

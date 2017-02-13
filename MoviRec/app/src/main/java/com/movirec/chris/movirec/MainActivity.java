@@ -12,10 +12,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.movirec.chris.movirec.customClasses.ListObject;
+import com.movirec.chris.movirec.customClasses.Media;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    ListView homeListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        homeListView = (ListView) findViewById(R.id.list);
+
+        showListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -31,6 +45,21 @@ public class MainActivity extends AppCompatActivity {
                 showAddDialog();
             }
         });
+    }
+
+    private void showListView(){
+        ListStorage listStorage =  new ListStorage();
+        listStorage.load(this);
+
+        homeListView.setAdapter(new HomeListAdapter(this, listStorage.getLists()));
+        homeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "Not Yet Implemented (W2)", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     private void showAddDialog(){
@@ -46,9 +75,20 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Add",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                // get user input and set it to result
-                                // edit text
-                                Toast.makeText(MainActivity.this, "Added List: " + userInput.getText().toString(), Toast.LENGTH_SHORT).show();
+                                String title = userInput.getText().toString();
+
+                                ListStorage listStorage =  new ListStorage();
+                                listStorage.load(MainActivity.this);
+
+                                ListObject newList = new ListObject(title, new Date(), new ArrayList<Media>());
+
+                                ArrayList<ListObject> allLists = listStorage.getLists();
+                                allLists.add(newList);
+
+                                listStorage.save(MainActivity.this, allLists);
+
+                                Toast.makeText(MainActivity.this, "Added List: " + title, Toast.LENGTH_SHORT).show();
+                                showListView();
                             }
                         })
                 .setNegativeButton("Cancel",

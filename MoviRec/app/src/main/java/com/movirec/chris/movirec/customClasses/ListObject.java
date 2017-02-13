@@ -1,10 +1,11 @@
 package com.movirec.chris.movirec.customClasses;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ListObject {
+public class ListObject implements Serializable{
     String listTitle;
     Date listCreateDate;
     int listSize;

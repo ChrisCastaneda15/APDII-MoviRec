@@ -3,6 +3,7 @@ package com.movirec.chris.movirec;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.movirec.chris.movirec.customClasses.ListObject;
 
@@ -44,6 +45,16 @@ public class ListStorage {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void deleteList(Context context, ListObject oldList) {
+        load(context);
+        for (int i = 0; i < lists.size(); i++) {
+            if (lists.get(i).getListTitle().equals(oldList.getListTitle())){
+                lists.remove(i);
+                save(context, lists);
+            }
         }
     }
 }

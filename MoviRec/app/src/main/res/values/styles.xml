@@ -17,7 +17,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
-    <style name="MoviRecTheme" parent="Theme.AppCompat.NoActionBar" >
+    <style name="MoviRecTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorSecondaryInverse">@android:color/background_light</item>
         <item name="android:colorForeground">@android:color/black</item>

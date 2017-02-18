@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="75dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/postertest"
+                android:id="@+id/listDetailPoster"
+                android:paddingLeft="10dp" />
+
+            <TextView
+                android:text="Movie Title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/listDetailTitle"
+                android:layout_weight="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@android:color/background_light"
+                android:textSize="24sp"
+                android:paddingLeft="5dp" />
+        </LinearLayout>
+
+        <TextView
+            android:text="Genre - 2017"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listDetailGenreYear"
+            android:textColor="@android:color/darker_gray"
+            android:paddingLeft="10dp" />
+    </LinearLayout>
+</LinearLayout>

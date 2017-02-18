@@ -1,6 +1,7 @@
 package com.movirec.chris.movirec;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -26,7 +27,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int LIST_CODE = 0x00001;
+    public static final int ADD_CODE = 0x00002;
+
     ListView homeListView;
+    ArrayList<ListObject> listObjectArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +56,25 @@ public class MainActivity extends AppCompatActivity {
         ListStorage listStorage =  new ListStorage();
         listStorage.load(this);
 
+        listObjectArrayList = listStorage.getLists();
+
         homeListView.setAdapter(new HomeListAdapter(this, listStorage.getLists()));
         homeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "Not Yet Implemented (W2)", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ListDetailActivity.class);
+                intent.putExtra("LIST", listObjectArrayList.get(position));
+                startActivityForResult(intent, MainActivity.LIST_CODE);
             }
         });
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showListView();
     }
 
     private void showAddDialog(){
@@ -101,25 +116,25 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 }

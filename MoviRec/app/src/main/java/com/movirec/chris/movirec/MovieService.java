@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 
 public class MovieService extends IntentService {
 
@@ -31,11 +32,11 @@ public class MovieService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         movieName = intent.getStringExtra("MOVIENAME");
-        movieName = movieName.toLowerCase();
-        movieName = movieName.replace(" ", "+");
+        String formattedmovieName = movieName.toLowerCase();
+        formattedmovieName = formattedmovieName.replace(" ", "+");
 
         String url = OMDB_P1;
-        url += movieName + OMDB_P2;
+        url += formattedmovieName + OMDB_P2;
 
         if (intent.hasExtra("YEAR")){
             url += intent.getStringExtra("YEAR");
@@ -72,32 +73,36 @@ public class MovieService extends IntentService {
                 JSONObject main = new JSONObject(data);
                 Log.e("parseMovieOMDB: ", main.toString());
 
-                if (main.has("Error")){
-                    Toast.makeText(this, "Movie/Show Not Found", Toast.LENGTH_SHORT).show();
-                }
-
-                if (main.getString("Type").equals("series")){
-                    isShow = true;
-                }
-
-                Media newMedia = new Media(
-                        isShow,
-                        main.getString("imdbID"),
-                        main.getString("Title"),
-                        main.getString("Year"),
-                        main.getString("Rated"),
-                        main.getString("Released"),
-                        main.getString("Runtime"),
-                        main.getString("Genre"),
-                        main.getString("Director"),
-                        main.getString("Actors"),
-                        main.getString("Plot"),
-                        main.getString("Poster"),
-                        main.getString("imdbRating")
-                );
-
                 Intent intent = new Intent(SearchMovieActivity.UPDATE_QUICK_LOOK);
-                intent.putExtra("MOVIE", newMedia);
+
+                if (main.has("Error")){
+                    Log.e("parseMovieOMDB: ", "NOT THERE");
+                    intent.putExtra("N/A", movieName);
+                }
+                else {
+                    if (main.getString("Type").equals("series")){
+                        isShow = true;
+                    }
+
+                    Media newMedia = new Media(
+                            isShow,
+                            main.getString("imdbID"),
+                            main.getString("Title"),
+                            main.getString("Year"),
+                            main.getString("Rated"),
+                            main.getString("Released"),
+                            main.getString("Runtime"),
+                            main.getString("Genre"),
+                            main.getString("Director"),
+                            main.getString("Actors"),
+                            main.getString("Plot"),
+                            main.getString("Poster"),
+                            main.getString("imdbRating"),
+                            new Date()
+                    );
+                    intent.putExtra("MOVIE", newMedia);
+                }
+
                 sendBroadcast(intent);
 
             } catch (Exception e) {

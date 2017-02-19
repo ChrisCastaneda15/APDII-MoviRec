@@ -22,6 +22,8 @@ import com.movirec.chris.movirec.customClasses.ListObject;
 import com.movirec.chris.movirec.customClasses.Media;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         homeListView = (ListView) findViewById(R.id.list);
 
+        updateLists();
         showListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -53,12 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showListView(){
-        ListStorage listStorage =  new ListStorage();
-        listStorage.load(this);
-
-        listObjectArrayList = listStorage.getLists();
-
-        homeListView.setAdapter(new HomeListAdapter(this, listStorage.getLists()));
+        homeListView.setAdapter(new HomeListAdapter(this, listObjectArrayList));
         homeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -67,13 +65,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, MainActivity.LIST_CODE);
             }
         });
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        updateLists();
         showListView();
     }
 
@@ -103,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                                 listStorage.save(MainActivity.this, allLists);
 
                                 Toast.makeText(MainActivity.this, "Added List: " + title, Toast.LENGTH_SHORT).show();
+                                updateLists();
                                 showListView();
                             }
                         })
@@ -116,25 +114,63 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    private void updateLists(){
+        ListStorage listStorage =  new ListStorage();
+        listStorage.load(this);
+
+        listObjectArrayList = listStorage.getLists();
+    }
+
+    private void sortAlpha(){
+        if (listObjectArrayList.size() > 0) {
+            Collections.sort(listObjectArrayList, new Comparator<ListObject>() {
+                @Override
+                public int compare(ListObject o1, ListObject o2) {
+                    return o1.getListTitle().compareTo(o2.getListTitle());
+                }
+            });
+        }
+        showListView();
+    }
+
+    private void sortAddedDate(){
+        if (listObjectArrayList.size() > 0) {
+            Collections.sort(listObjectArrayList, new Comparator<ListObject>() {
+                @Override
+                public int compare(ListObject o1, ListObject o2) {
+                    return o1.getListCreateDate().compareTo(o2.getListCreateDate());
+                }
+            });
+        }
+        showListView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_home_sort_alpha){
+            Toast.makeText(this, "Sorted by Name", Toast.LENGTH_SHORT).show();
+            sortAlpha();
+            return true;
+        }
+        else if (id == R.id.action_home_sort_created){
+            Toast.makeText(this, "Sorted by Date Added", Toast.LENGTH_SHORT).show();
+            sortAddedDate();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

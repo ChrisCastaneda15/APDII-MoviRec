@@ -12,16 +12,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.movirec.chris.movirec.customClasses.ListObject;
+import com.movirec.chris.movirec.customClasses.Media;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListDetailActivity extends AppCompatActivity {
 
     ListObject listObject;
+    ArrayList<Media> mediaList;
     ListView listView;
 
     @Override
@@ -32,10 +38,14 @@ public class ListDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         listObject = (ListObject) getIntent().getSerializableExtra("LIST");
+        listView = (ListView) findViewById(R.id.listDetail_list);
+        mediaList = listObject.getListMedia();
+        sortAddedDate();
 
         setTitle(listObject.getListTitle());
 
-        Log.e("onCreate: ", listObject.toString());
+        Log.e("onCreate: ", String.valueOf(listObject.getListMedia().size()));
+        Log.e("onCreate: ", String.valueOf(listObject.getListSize()));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +57,71 @@ public class ListDetailActivity extends AppCompatActivity {
                 startActivityForResult(intent, MainActivity.ADD_CODE);
             }
         });
+    }
+
+    private void showListView(ArrayList<Media> media){
+        listView.setAdapter(new ListDetailAdapter(this, media));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(ListDetailActivity.this, "Movie Detail: Not yet implemented", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sortAlpha(){
+        if (mediaList.size() > 0) {
+            Collections.sort(mediaList, new Comparator<Media>() {
+                @Override
+                public int compare(Media o1, Media o2) {
+                    return o1.getMediaTitle().compareTo(o2.getMediaTitle());
+                }
+            });
+        }
+        showListView(mediaList);
+    }
+
+    private void sortAddedDate(){
+        if (mediaList.size() > 0) {
+            Collections.sort(mediaList, new Comparator<Media>() {
+                @Override
+                public int compare(Media o1, Media o2) {
+                    return o1.getDateAdded().compareTo(o2.getDateAdded());
+                }
+            });
+        }
+        showListView(mediaList);
+    }
+
+    private void sortReleaseDate(){
+        if (mediaList.size() > 0) {
+            Collections.sort(mediaList, new Comparator<Media>() {
+                @Override
+                public int compare(Media o1, Media o2) {
+                    return o1.getMediaYear().compareTo(o2.getMediaYear());
+                }
+            });
+        }
+        showListView(mediaList);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            listObject = (ListObject) data.getSerializableExtra("LIST");
+            // refresh LV
+            showListView(listObject.getListMedia());
+            mediaList = listObject.getListMedia();
+            Log.e("onActivityResult: ", String.valueOf(listObject.getListMedia().size()));
+            Log.e("onActivityResult: ", String.valueOf(listObject.getListSize()));
+
+        }
     }
 
     @Override
@@ -79,6 +154,21 @@ public class ListDetailActivity extends AppCompatActivity {
                         }
                     })
                     .show();
+            return true;
+        }
+        else if (id == R.id.action_sort_alpha){
+            Toast.makeText(this, "Sorted by Name", Toast.LENGTH_SHORT).show();
+            sortAlpha();
+            return true;
+        }
+        else if (id == R.id.action_sort_created){
+            Toast.makeText(this, "Sorted by Date Added", Toast.LENGTH_SHORT).show();
+            sortAddedDate();
+            return true;
+        }
+        else if (id == R.id.action_sort_released){
+            Toast.makeText(this, "Sorted by Release Date", Toast.LENGTH_SHORT).show();
+            sortReleaseDate();
             return true;
         }
 

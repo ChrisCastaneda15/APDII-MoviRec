@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_home_sort_alpha"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_sort_alpha2"
+        app:showAsAction="ifRoom"
+        android:title="alpha" />
+    <item
+        android:id="@+id/action_home_sort_created"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_sort_added"
+        app:showAsAction="ifRoom"
+        android:title="dateCreated" />
+
+</menu>

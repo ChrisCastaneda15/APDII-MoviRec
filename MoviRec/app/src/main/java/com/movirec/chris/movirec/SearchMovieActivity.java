@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -75,11 +76,35 @@ public class SearchMovieActivity extends AppCompatActivity {
         unregisterReceiver(updateQuickLook);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("LIST", listObject);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     private final BroadcastReceiver updateQuickLook = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e("onReceive: ", String.valueOf(intent.hasExtra("MOVIE")));
-            showQuickLook((Media) intent.getSerializableExtra("MOVIE"));
+            if (intent.hasExtra("MOVIE")){
+                showQuickLook((Media) intent.getSerializableExtra("MOVIE"));
+            }
+            else {
+                new AlertDialog.Builder(context)
+                        .setTitle("Movie not Found!")
+                        .setMessage("Sorry but \"" + intent.getStringExtra("N/A") + "\" was not found.\nPlease try again.")
+                        .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                movieNameET.setText("");
+                                yearET.setText("");
+                            }
+                        })
+                        .show();
+
+            }
+
             loading.dismiss();
         }
     };
@@ -118,7 +143,7 @@ public class SearchMovieActivity extends AppCompatActivity {
 
     }
 
-    private void showQuickLook(Media media){
+    private void showQuickLook(final Media media){
         movieNameET.setText("");
         yearET.setText("");
 
@@ -133,14 +158,19 @@ public class SearchMovieActivity extends AppCompatActivity {
         addMovieButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SearchMovieActivity.this, "ADD TO LIST", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchMovieActivity.this, "Added to " + listObject.getListTitle(), Toast.LENGTH_SHORT).show();
+                listObject.getListMedia().add(media);
+                listObject.setListSize(listObject.getListMedia().size());
+                ListStorage listStorage = new ListStorage();
+                listStorage.load(SearchMovieActivity.this);
+                listStorage.updateList(SearchMovieActivity.this, listObject);
             }
         });
         moreInfoButton.setVisibility(View.VISIBLE);
         moreInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SearchMovieActivity.this, "SHOW DETAIL", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchMovieActivity.this, "SHOW DETAIL: Not yet implemented", Toast.LENGTH_SHORT).show();
             }
         });
 

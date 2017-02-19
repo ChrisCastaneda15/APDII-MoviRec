@@ -3,6 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.movirec.chris.movirec.MainActivity">
     <item
+        android:id="@+id/action_sort_alpha"
+        android:orderInCategory="100"
+        android:title="Sort by Name"
+        android:icon="@drawable/ic_action_sort_alpha2"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_sort_created"
+        android:orderInCategory="100"
+        android:title="Sort by Date Added"
+        android:icon="@drawable/ic_action_sort_added"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_sort_released"
+        android:orderInCategory="100"
+        android:title="Sort by Year"
+        android:icon="@drawable/ic_sort_released"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_delete"
         android:orderInCategory="100"
         android:title="Delete List"

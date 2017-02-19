@@ -48,5 +48,6 @@ public class ListObject implements Serializable{
 
     public void setListMedia(ArrayList<Media> listMedia) {
         this.listMedia = listMedia;
+        this.listSize = listMedia.size();
     }
 }

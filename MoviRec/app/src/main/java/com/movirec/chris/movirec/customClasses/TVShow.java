@@ -3,6 +3,7 @@ package com.movirec.chris.movirec.customClasses;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TVShow extends Media implements Serializable{
 
@@ -12,10 +13,10 @@ public class TVShow extends Media implements Serializable{
 
 
     public TVShow(Boolean isShow, String mediaID, String mediaTitle, String mediaYear, String mediaRating, String mediaReleased, String mediaRuntime,
-                  String mediaGenre, String mediaDirector, String mediaActors, String mediaPlot, String mediaPoster, String mediaIMDBScore, String tvSeasons,
+                  String mediaGenre, String mediaDirector, String mediaActors, String mediaPlot, String mediaPoster, String mediaIMDBScore, Date date , String tvSeasons,
                   ArrayList<TVEpisode> tvEpisodes, String tvStatus) {
         super(isShow, mediaID, mediaTitle, mediaYear, mediaRating, mediaReleased, mediaRuntime, mediaGenre, mediaDirector, mediaActors, mediaPlot,
-                mediaPoster, mediaIMDBScore);
+                mediaPoster, mediaIMDBScore, date);
         this.tvSeasons = tvSeasons;
         this.tvEpisodes = tvEpisodes;
         this.tvStatus = tvStatus;

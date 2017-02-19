@@ -1,6 +1,7 @@
 package com.movirec.chris.movirec.customClasses;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Media implements Serializable {
 
@@ -35,9 +36,10 @@ public class Media implements Serializable {
     String mediaPlot;
     String mediaPoster;
     String mediaIMDBScore;
+    Date dateAdded;
 
     public Media(Boolean isShow, String mediaID, String mediaTitle, String mediaYear, String mediaRating, String mediaReleased, String mediaRuntime,
-                 String mediaGenre, String mediaDirector, String mediaActors, String mediaPlot, String mediaPoster, String mediaIMDBScore) {
+                 String mediaGenre, String mediaDirector, String mediaActors, String mediaPlot, String mediaPoster, String mediaIMDBScore, Date date) {
         this.isShow = isShow;
         this.mediaID = mediaID;
         this.mediaTitle = mediaTitle;
@@ -51,6 +53,7 @@ public class Media implements Serializable {
         this.mediaPlot = mediaPlot;
         this.mediaPoster = mediaPoster;
         this.mediaIMDBScore = mediaIMDBScore;
+        this.dateAdded = date;
     }
 
     public Boolean getShow() {
@@ -155,5 +158,13 @@ public class Media implements Serializable {
 
     public void setMediaIMDBScore(String mediaIMDBScore) {
         this.mediaIMDBScore = mediaIMDBScore;
+    }
+
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
     }
 }

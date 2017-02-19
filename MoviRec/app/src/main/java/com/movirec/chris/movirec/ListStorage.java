@@ -57,4 +57,15 @@ public class ListStorage {
             }
         }
     }
+
+    public void updateList(Context context, ListObject list){
+        load(context);
+        for (int i = 0; i < lists.size(); i++) {
+            if (lists.get(i).getListTitle().equals(list.getListTitle())){
+                lists.get(i).setListMedia(list.getListMedia());
+                save(context, lists);
+            }
+        }
+
+    }
 }

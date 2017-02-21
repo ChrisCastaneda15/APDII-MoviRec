@@ -2,10 +2,8 @@ package com.movirec.chris.movirec;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.movirec.chris.movirec.listViewAdapters.HomeListAdapter;
 import com.movirec.chris.movirec.customClasses.ListObject;
 import com.movirec.chris.movirec.customClasses.Media;
 
@@ -25,12 +24,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int LIST_CODE = 0x00001;
     public static final int ADD_CODE = 0x00002;
+    public static final int DETAIL_CODE = 0x00003;
 
     ListView homeListView;
     ArrayList<ListObject> listObjectArrayList;

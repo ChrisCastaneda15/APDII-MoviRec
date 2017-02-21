@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.movirec.chris.movirec">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -25,10 +25,14 @@
             android:name=".ListDetailActivity"
             android:label="@string/title_activity_list_detail"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SearchMovieActivity"/>
+        <activity android:name=".SearchMovieActivity" />
 
-        <service android:name=".MovieService"/>
+        <service android:name=".customServices.MovieService" />
+        <service android:name=".customServices.MovieDetailService" />
+        <service android:name=".customServices.TVDetailService" />
 
+        <activity android:name=".MovieDetailActivity" />
+        <activity android:name=".TVDetailActivity"/>
     </application>
 
 </manifest>

@@ -32,7 +32,7 @@
                 android:ems="10"
                 android:id="@+id/MovieNameET"
                 android:textColor="?attr/colorButtonNormal"
-                android:hint="Movie Name"
+                android:hint="Movie/Show Name"
                 android:hapticFeedbackEnabled="true"
                 android:textColorHint="@android:color/darker_gray" />
 
@@ -45,7 +45,8 @@
                 android:hint="Year(Opt.)"
                 android:textColorHint="@android:color/darker_gray"
                 android:layout_weight="1.05"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
 
             <Button
                 android:text="Search"

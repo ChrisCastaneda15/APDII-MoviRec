@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,13 +15,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.movirec.chris.movirec.customServices.MovieDetailService;
+import com.movirec.chris.movirec.customServices.TVDetailService;
+import com.movirec.chris.movirec.listViewAdapters.ListDetailAdapter;
 import com.movirec.chris.movirec.customClasses.ListObject;
 import com.movirec.chris.movirec.customClasses.Media;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class ListDetailActivity extends AppCompatActivity {
 
@@ -59,12 +60,37 @@ public class ListDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void showListView(ArrayList<Media> media){
+    private void showListView(final ArrayList<Media> media){
         listView.setAdapter(new ListDetailAdapter(this, media));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ListDetailActivity.this, "Movie Detail: Not yet implemented", Toast.LENGTH_SHORT).show();
+                Log.e("onItemClick: ", mediaList.get(position).getMediaTitle());
+
+                if (mediaList.get(position).getShow()){
+                    //Start Service
+                    Intent service = new Intent(ListDetailActivity.this, TVDetailService.class);
+                    service.putExtra("MEDIA", media.get(position));
+                    startService(service);
+                    //Start Activity
+                    Intent intent = new Intent(ListDetailActivity.this, TVDetailActivity.class);
+                    intent.putExtra("list", listObject);
+                    intent.putExtra("MEDIA", mediaList.get(position));
+                    intent.putExtra("fromList", true);
+                    startActivityForResult(intent, MainActivity.DETAIL_CODE);
+                }
+                else {
+                    //Start Service
+                    Intent service = new Intent(ListDetailActivity.this, MovieDetailService.class);
+                    service.putExtra("MEDIA", media.get(position));
+                    startService(service);
+                    //Start Activity
+                    Intent intent = new Intent(ListDetailActivity.this, MovieDetailActivity.class);
+                    intent.putExtra("list", listObject);
+                    intent.putExtra("MEDIA", mediaList.get(position));
+                    intent.putExtra("fromList", true);
+                    startActivityForResult(intent, MainActivity.DETAIL_CODE);
+                }
             }
         });
     }
@@ -108,6 +134,7 @@ public class ListDetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override

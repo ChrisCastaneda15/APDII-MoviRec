@@ -1,8 +1,7 @@
-package com.movirec.chris.movirec;
+package com.movirec.chris.movirec.listViewAdapters;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.snowdream.android.widget.SmartImageView;
-import com.movirec.chris.movirec.customClasses.ListObject;
+import com.movirec.chris.movirec.R;
 import com.movirec.chris.movirec.customClasses.Media;
 
 import java.util.ArrayList;
@@ -70,20 +68,25 @@ public class ListDetailAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        if(convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.listviewcell_listdetail, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        }
+        ViewHolder holder;
+
+        convertView = LayoutInflater.from(mContext).inflate(R.layout.listviewcell_listdetail, parent, false);
+        holder = new ViewHolder(convertView);
+        convertView.setTag(holder);
 
         Media item = getItem(position);
+
+        char[] characters = item.getMediaTitle().toCharArray();
 
         // Setup view using the ViewHolder
         if (holder != null){
             holder.title.setText(item.getMediaTitle());
+            if (characters.length > 30){
+                holder.title.setTextSize(20);
+            }
             holder.genreYear.setText(item.getMediaGenre() + " - " + item.getMediaYear());
             Picasso.with(mContext).load(item.getMediaPoster()).into(holder.poster);
+            convertView.setTag(holder);
         }
 
         return convertView;

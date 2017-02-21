@@ -6,20 +6,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +24,9 @@ import android.widget.Toast;
 
 import com.movirec.chris.movirec.customClasses.ListObject;
 import com.movirec.chris.movirec.customClasses.Media;
+import com.movirec.chris.movirec.customServices.MovieDetailService;
+import com.movirec.chris.movirec.customServices.MovieService;
+import com.movirec.chris.movirec.customServices.TVDetailService;
 
 import it.sephiroth.android.library.picasso.Picasso;
 
@@ -54,6 +54,9 @@ public class SearchMovieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle("Search");
+
         setContentView(R.layout.activity_search_movie);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -68,6 +71,15 @@ public class SearchMovieActivity extends AppCompatActivity {
 
         IntentFilter filter = new IntentFilter(UPDATE_QUICK_LOOK);
         registerReceiver(updateQuickLook, filter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            listObject = (ListObject) data.getSerializableExtra("LIST");
+            showQuickLook((Media) data.getSerializableExtra("MEDIA"));
+        }
     }
 
     @Override
@@ -102,7 +114,7 @@ public class SearchMovieActivity extends AppCompatActivity {
                             }
                         })
                         .show();
-
+                hideQuickLook();
             }
 
             loading.dismiss();
@@ -154,6 +166,18 @@ public class SearchMovieActivity extends AppCompatActivity {
         movieDescTV.setText(media.getMediaPlot() + "\nReleased on " + media.getMediaReleased());
         movieDescTV.setMovementMethod(new ScrollingMovementMethod());
 
+        for (int i = 0; i < listObject.getListMedia().size(); i++) {
+            if (listObject.getListMedia().get(i).getMediaID().equals(media.getMediaID())){
+                addMovieButton.setText("ADDED");
+                addMovieButton.setEnabled(false);
+                break;
+            }
+            else {
+                addMovieButton.setText("ADD");
+                addMovieButton.setEnabled(true);
+            }
+        }
+
         addMovieButton.setVisibility(View.VISIBLE);
         addMovieButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,18 +188,62 @@ public class SearchMovieActivity extends AppCompatActivity {
                 ListStorage listStorage = new ListStorage();
                 listStorage.load(SearchMovieActivity.this);
                 listStorage.updateList(SearchMovieActivity.this, listObject);
+                addMovieButton.setText("ADDED");
+                addMovieButton.setEnabled(false);
             }
         });
         moreInfoButton.setVisibility(View.VISIBLE);
         moreInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SearchMovieActivity.this, "SHOW DETAIL: Not yet implemented", Toast.LENGTH_SHORT).show();
+                if (media.getShow()){
+                    //Start Service
+                    Intent service = new Intent(SearchMovieActivity.this, TVDetailService.class);
+                    service.putExtra("MEDIA", media);
+                    startService(service);
+                    //Start Activity
+                    Intent intent = new Intent(SearchMovieActivity.this, TVDetailActivity.class);
+                    intent.putExtra("list", listObject);
+                    intent.putExtra("MEDIA", media);
+                    if (addMovieButton.getText().toString().equals("ADDED")){
+                        intent.putExtra("fromList", true);
+                    }
+                    else {
+                        intent.putExtra("fromList", false);
+                    }
+
+                    startActivityForResult(intent, MainActivity.DETAIL_CODE);
+                }
+                else {
+                    //Start Service
+                    Intent service = new Intent(SearchMovieActivity.this, MovieDetailService.class);
+                    service.putExtra("MEDIA", media);
+                    startService(service);
+                    //Start Activity
+                    Intent intent = new Intent(SearchMovieActivity.this, MovieDetailActivity.class);
+                    intent.putExtra("list", listObject);
+                    intent.putExtra("MEDIA", media);
+                    if (addMovieButton.getText().toString().equals("ADDED")){
+                        intent.putExtra("fromList", true);
+                    }
+                    else {
+                        intent.putExtra("fromList", false);
+                    }
+                    startActivityForResult(intent, MainActivity.DETAIL_CODE);
+                }
             }
         });
 
         moviePosterIV.setVisibility(View.VISIBLE);
         Picasso.with(this).load(media.getMediaPoster()).into(moviePosterIV);
+    }
+
+    private void hideQuickLook(){
+        movieTitleTV.setVisibility(GONE);
+        movieDescTV.setVisibility(GONE);
+        addMovieButton.setVisibility(GONE);
+        moreInfoButton.setVisibility(GONE);
+        moviePosterIV.setVisibility(GONE);
     }
 
     private void searchMovie(){

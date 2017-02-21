@@ -30,4 +30,5 @@ dependencies {
     compile 'com.github.snowdream.android:smartimageview:0.0.2'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
     compile 'it.sephiroth.android.library.picasso:picasso:2.5.2.4b'
+    compile 'me.grantland:autofittextview:0.2.1'
 }

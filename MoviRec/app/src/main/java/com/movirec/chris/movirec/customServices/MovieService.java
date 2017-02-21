@@ -1,10 +1,11 @@
-package com.movirec.chris.movirec;
+package com.movirec.chris.movirec.customServices;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.movirec.chris.movirec.SearchMovieActivity;
 import com.movirec.chris.movirec.customClasses.Media;
 
 import org.apache.commons.io.IOUtils;

@@ -30,9 +30,11 @@
         <service android:name=".customServices.MovieService" />
         <service android:name=".customServices.MovieDetailService" />
         <service android:name=".customServices.TVDetailService" />
+        <service android:name=".customServices.TVEpisodeService" />
 
         <activity android:name=".MovieDetailActivity" />
-        <activity android:name=".TVDetailActivity"/>
+        <activity android:name=".TVDetailActivity" />
+        <activity android:name=".TVEpisodeActivity"></activity>
     </application>
 
 </manifest>

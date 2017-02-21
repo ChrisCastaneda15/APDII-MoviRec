@@ -12,11 +12,11 @@ public class TVShow extends Media implements Serializable{
     ArrayList<TVEpisode> tvEpisodes;
 
 
-    public TVShow(Boolean isShow, String mediaID, String mediaTitle, String mediaYear, String mediaRating, String mediaReleased, String mediaRuntime,
-                  String mediaGenre, String mediaDirector, String mediaActors, String mediaPlot, String mediaPoster, String mediaIMDBScore, Date date , String tvSeasons,
+    public TVShow(Media media, String tvSeasons,
                   ArrayList<TVEpisode> tvEpisodes, String tvStatus) {
-        super(isShow, mediaID, mediaTitle, mediaYear, mediaRating, mediaReleased, mediaRuntime, mediaGenre, mediaDirector, mediaActors, mediaPlot,
-                mediaPoster, mediaIMDBScore, date);
+        super(media.isShow, media.getMediaID(), media.getMediaTitle(), media.getMediaYear(), media.getMediaRating(), media.getMediaReleased(),
+                media.getMediaRuntime(), media.getMediaGenre(), media.getMediaDirector(), media.getMediaActors(), media.getMediaPlot(), media.getMediaPoster(),
+                media.getMediaIMDBScore(), media.getDateAdded());
         this.tvSeasons = tvSeasons;
         this.tvEpisodes = tvEpisodes;
         this.tvStatus = tvStatus;

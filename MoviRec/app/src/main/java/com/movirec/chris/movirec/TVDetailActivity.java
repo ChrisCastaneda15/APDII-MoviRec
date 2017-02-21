@@ -13,12 +13,16 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.movirec.chris.movirec.customClasses.ListObject;
 import com.movirec.chris.movirec.customClasses.Media;
+import com.movirec.chris.movirec.customClasses.TVEpisode;
+import com.movirec.chris.movirec.customServices.MovieDetailService;
+import com.movirec.chris.movirec.customServices.TVEpisodeService;
 
 import java.util.ArrayList;
 
@@ -42,6 +46,7 @@ public class TVDetailActivity extends AppCompatActivity {
     TextView starring;
     TextView imdbRating;
     TextView plot;
+    Button episodes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +113,21 @@ public class TVDetailActivity extends AppCompatActivity {
 
         plot = (TextView) findViewById(R.id.show_plotTV);
         plot.setText("");
+
+        episodes = (Button) findViewById(R.id.show_episodeListButton);
+        episodes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent service = new Intent(TVDetailActivity.this, TVEpisodeService.class);
+                service.putExtra("MEDIA", media);
+                startService(service);
+
+                Intent intent = new Intent(TVDetailActivity.this, TVEpisodeActivity.class);
+                intent.putExtra("MEDIA", media);
+                intent.putExtra("NAME", media.getMediaTitle());
+                startActivityForResult(intent, MainActivity.EPISODE_CODE);
+            }
+        });
     }
 
     @Override

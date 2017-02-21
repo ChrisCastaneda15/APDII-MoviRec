@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int LIST_CODE = 0x00001;
     public static final int ADD_CODE = 0x00002;
     public static final int DETAIL_CODE = 0x00003;
+    public static final int EPISODE_CODE = 0x00004;
 
     ListView homeListView;
     ArrayList<ListObject> listObjectArrayList;

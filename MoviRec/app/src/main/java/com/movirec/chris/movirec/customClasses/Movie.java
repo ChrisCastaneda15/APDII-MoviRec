@@ -5,20 +5,58 @@ import com.movirec.chris.movirec.customClasses.Media;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Movie extends Media implements Serializable{
+public class Movie implements Serializable{
+    String title;
+    String plot;
+    String poster;
+    String date;
+    String backDrop;
 
-    String backdropPath;
-
-    public Movie(Boolean isShow, String mediaID, String mediaTitle, String mediaYear, String mediaRating, String mediaReleased, String mediaRuntime, String mediaGenre, String mediaDirector, String mediaActors, String mediaPlot, String mediaPoster, String mediaIMDBScore, Date date, String backdropPath) {
-        super(isShow, mediaID, mediaTitle, mediaYear, mediaRating, mediaReleased, mediaRuntime, mediaGenre, mediaDirector, mediaActors, mediaPlot, mediaPoster, mediaIMDBScore, date);
-        this.backdropPath = backdropPath;
+    public Movie(String title, String plot, String poster, String date, String backDrop) {
+        this.title = title;
+        this.plot = plot;
+        this.poster = poster;
+        this.date = date;
+        this.backDrop = backDrop;
     }
 
-    public String getBackdropPath() {
-        return backdropPath;
+    public String getTitle() {
+        return title;
     }
 
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPlot() {
+        return plot;
+    }
+
+    public void setPlot(String plot) {
+        this.plot = plot;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getBackDrop() {
+        return backDrop;
+    }
+
+    public void setBackDrop(String backDrop) {
+        this.backDrop = backDrop;
     }
 }

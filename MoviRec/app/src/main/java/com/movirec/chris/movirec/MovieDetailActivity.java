@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -54,6 +55,12 @@ public class MovieDetailActivity extends AppCompatActivity {
         isAdded = getIntent().getBooleanExtra("fromList", false);
 
         setupUI(media);
+
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
     }
 
@@ -133,6 +140,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
 
         if (id == R.id.action_imdb){
             new AlertDialog.Builder(this)

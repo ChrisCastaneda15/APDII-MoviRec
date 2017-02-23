@@ -9,11 +9,14 @@ import android.content.IntentFilter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,9 +27,15 @@ import android.widget.Toast;
 
 import com.movirec.chris.movirec.customClasses.ListObject;
 import com.movirec.chris.movirec.customClasses.Media;
+import com.movirec.chris.movirec.customClasses.Movie;
+import com.movirec.chris.movirec.customClasses.UpcomingReleasedObject;
 import com.movirec.chris.movirec.customServices.MovieDetailService;
 import com.movirec.chris.movirec.customServices.MovieService;
 import com.movirec.chris.movirec.customServices.TVDetailService;
+import com.movirec.chris.movirec.customServices.UpcomingTheaterService;
+import com.movirec.chris.movirec.listViewAdapters.upcomingReleasedAdapter;
+
+import java.util.ArrayList;
 
 import it.sephiroth.android.library.picasso.Picasso;
 
@@ -35,6 +44,7 @@ import static android.view.View.GONE;
 public class SearchMovieActivity extends AppCompatActivity {
 
     public static final String UPDATE_QUICK_LOOK = "com.movirec.chris.movirec.UPDATE_QUICK_LOOK";
+    public static final String UPDATE_UP_REL = "com.movirec.chris.movirec.UPDATE_UP_REL";
 
     ListObject listObject;
 
@@ -50,10 +60,18 @@ public class SearchMovieActivity extends AppCompatActivity {
     Button moreInfoButton;
     ImageView moviePosterIV;
     ListView upcomingAndInTheaterLV;
+    Button upcomingButton;
+    Button releasedButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         setTitle("Search");
 
@@ -71,6 +89,9 @@ public class SearchMovieActivity extends AppCompatActivity {
 
         IntentFilter filter = new IntentFilter(UPDATE_QUICK_LOOK);
         registerReceiver(updateQuickLook, filter);
+
+        filter = new IntentFilter(UPDATE_UP_REL);
+        registerReceiver(updateUpRel, filter);
     }
 
     @Override
@@ -86,6 +107,7 @@ public class SearchMovieActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(updateQuickLook);
+        unregisterReceiver(updateUpRel);
     }
 
     @Override
@@ -96,11 +118,23 @@ public class SearchMovieActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent();
+            intent.putExtra("LIST", listObject);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private final BroadcastReceiver updateQuickLook = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e("onReceive: ", String.valueOf(intent.hasExtra("MOVIE")));
             if (intent.hasExtra("MOVIE")){
+                upcomingAndInTheaterLV.setVisibility(GONE);
                 showQuickLook((Media) intent.getSerializableExtra("MOVIE"));
             }
             else {
@@ -120,6 +154,31 @@ public class SearchMovieActivity extends AppCompatActivity {
             loading.dismiss();
         }
     };
+
+    private final BroadcastReceiver updateUpRel = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            UpcomingReleasedObject object = (UpcomingReleasedObject) intent.getSerializableExtra("UPREL");
+            showUpRelLV(object.getMovies());
+        }
+    };
+
+    private void showUpRelLV(final ArrayList<Movie> movies){
+        upcomingAndInTheaterLV.setVisibility(View.VISIBLE);
+        upcomingAndInTheaterLV.setAdapter(new upcomingReleasedAdapter(this, movies));
+        upcomingAndInTheaterLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                movieNameET.setText(movies.get(position).getTitle());
+                char[] characters = movies.get(position).getDate().toCharArray();
+                String y = String.valueOf(characters[0]) + String.valueOf(characters[1]) + String.valueOf(characters[2]) + String.valueOf(characters[3]);
+                Log.e("onItemClick: ", String.valueOf(characters[0]));
+                yearET.setText(y);
+                searchButton.performClick();
+            }
+        });
+
+    }
 
     private void setUpUI() {
         // Initial Search Portion
@@ -152,6 +211,27 @@ public class SearchMovieActivity extends AppCompatActivity {
 
         // Additional Search Options
         upcomingAndInTheaterLV = (ListView) findViewById(R.id.SearchLV);
+
+        upcomingButton = (Button) findViewById(R.id.upcomingButton);
+        upcomingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideQuickLook();
+                Intent service = new Intent(SearchMovieActivity.this, UpcomingTheaterService.class);
+                service.putExtra("UP", true);
+                startService(service);
+            }
+        });
+        releasedButton = (Button) findViewById(R.id.releasedButton);
+        releasedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideQuickLook();
+                Intent service = new Intent(SearchMovieActivity.this, UpcomingTheaterService.class);
+                service.putExtra("UP", false);
+                startService(service);
+            }
+        });
 
     }
 

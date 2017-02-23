@@ -105,7 +105,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="wrap_content">
 
             <Button
                 android:text="add"
@@ -113,8 +113,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/AddMovieButton"
                 android:layout_weight="1"
-                android:background="@color/colorAccent"
-                android:textColor="@android:color/background_light" />
+                android:textColor="@android:color/background_light"
+                style="@style/Widget.AppCompat.Button.Colored" />
 
             <Button
                 android:text="Details"
@@ -128,8 +128,34 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.55"
-            android:id="@+id/SearchLV" />
+            android:id="@+id/SearchLV"
+            android:visibility="gone"
+            android:paddingTop="10dp"
+            android:layout_height="390dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="Released Movies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/releasedButton"
+                android:layout_weight="1"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:textColor="@android:color/background_light" />
+
+            <Button
+                android:text="Upcoming Movies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/upcomingButton"
+                android:layout_weight="1"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:textColor="@android:color/background_light" />
+        </LinearLayout>
     </LinearLayout>
+
 </RelativeLayout>

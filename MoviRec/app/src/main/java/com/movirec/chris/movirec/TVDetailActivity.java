@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,12 @@ public class TVDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tvdetail);
+
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         listObject = (ListObject) getIntent().getSerializableExtra("list");
         media = (Media) getIntent().getSerializableExtra("MEDIA");
@@ -148,6 +155,10 @@ public class TVDetailActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
 
         if (id == R.id.action_imdb){
             new AlertDialog.Builder(this)

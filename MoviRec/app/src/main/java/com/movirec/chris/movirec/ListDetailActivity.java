@@ -38,6 +38,11 @@ public class ListDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         listObject = (ListObject) getIntent().getSerializableExtra("LIST");
         listView = (ListView) findViewById(R.id.listDetail_list);
         mediaList = listObject.getListMedia();
@@ -58,6 +63,7 @@ public class ListDetailActivity extends AppCompatActivity {
                 startActivityForResult(intent, MainActivity.ADD_CODE);
             }
         });
+
     }
 
     private void showListView(final ArrayList<Media> media){
@@ -164,6 +170,10 @@ public class ListDetailActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
 
         if (id == R.id.action_delete) {
             new AlertDialog.Builder(this)
